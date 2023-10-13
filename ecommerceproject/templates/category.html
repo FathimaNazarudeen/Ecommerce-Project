@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+        Welcome to shopcraze where you can buy different items
+    {% endif %}
+{% endblock %}
+{% block title %}
+{% if category %}
+    {{ category.name }} - shopcraze
+{% else %}
+    See our new collections-Shopcraze
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+<div>
+    <div class="row my_row_class">
+        <div class="mx-auto">
+        <p><a href="{% url 'shop:allProdCat' %}">Our Product Collections</a></p>
+    </div>
+</div>
+    </div>
+{% endif %}
+<div class="mx-auto">
+    {% if category %}
+    <img class="my_image" src="{{category.image.url}}"alt="{{category.name}}" width="1500;" height="1400px;">
+
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title">
+        {{category.name}}
+    </h1>
+    <p class="text-justify">
+        {{category.description}}
+    </p>
+</div>
+{% else %}
+<div class="container">
+    <div class="row">
+    <img class="my_image my_image_padding" src="{% static 'img/banner.png' %}"alt="Our products" width="1500px;">
+</div>
+</div>
+<br>
+<div>
+    <h1 class="text-center my-title">
+        Our products collection
+    </h1>
+    <p class="text-justify">
+        Welcome to Shopcraze, your one-stop destination for a world of shopping delights. Dive into a treasure trove of high-quality products spanning fashion, electronics, home decor, beauty, toys, sports, and more. We're dedicated to making your shopping experience seamless and secure, offering competitive prices, fast shipping, and excellent customer support. Discover the latest trends, unbeatable deals, and a community of satisfied customers. Shop smart, shop with confidence, at Shopcraze.
+
+    </p>
+
+</div>
+{% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 com-sm-12 col-md-4 xol-lg-4">
+            <div class="card text-center" style="min-width:18rem;">
+                <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}" width="130px;" height="500px;"></a>
+                <div class="card-body">
+                    <h4>{{product.name}}</h4>
+                    <p>{{product.price}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}
